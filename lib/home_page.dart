@@ -1,8 +1,9 @@
-
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:maths/const.dart';
 import 'package:maths/util/number_key.dart';
+import 'package:maths/util/result_message.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -66,10 +67,51 @@ class _HomePageState extends State<HomePage> {
   //check if user is correct or not
   void checkResult() {
     if (numberA + numberB == int.parse(userAnswer)) {
-      print('correct');
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ResultMessage(
+              message: 'Correct',
+              onTap: goToNextQuestion,
+              icon: Icons.arrow_forward,
+            );
+          });
     } else {
-      print('incorrect');
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ResultMessage(
+              message: 'Sorry try again',
+              onTap: goBackToQuestion,
+              icon: Icons.rotate_left,
+            );
+          });
     }
+  }
+
+  // create random numbers
+
+  var randomNumber = Random();
+
+// go to next question
+  void goToNextQuestion() {
+    // dismiss alert dialog
+    Navigator.of(context).pop();
+
+    // reset vlues
+    setState(() {
+      userAnswer = '';
+    });
+
+    // create a new quesion
+    numberA = randomNumber.nextInt(10);
+    numberB = randomNumber.nextInt(10);
+  }
+
+  // Go back to question
+  void goBackToQuestion() {
+    // dismiss alert dialogue
+    Navigator.of(context).pop();
   }
 
   @override
